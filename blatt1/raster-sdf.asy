@@ -61,13 +61,14 @@ int res_x = 16, res_y = 9;
  */
 void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true) {
 	int x_min = 0;
-	int x_max = 0;
+	int x_max = res_x;
 	int y_min = 0;
-	int y_max = 0;
-	if (!use_bb) {
-		x_min = y_min = 0;
-		x_max = res_x;
-		y_max = res_y;
+	int y_max = res_y;
+	if (use_bb) {
+		x_min = min(round(tri.a.x), round(tri.b.x), round(tri.c.x));
+		x_max = max(round(tri.a.x), round(tri.b.x), round(tri.c.x));
+		y_min = min(round(tri.a.y), round(tri.b.y), round(tri.c.y));
+		y_max = max(round(tri.a.y), round(tri.b.y), round(tri.c.y));
 	}
 	if (draw_bb) {
 		draw((x_min,y_min)--(x_max,y_min)--(x_max,y_max)--(x_min,y_max)--cycle);
