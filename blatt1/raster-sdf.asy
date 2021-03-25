@@ -59,16 +59,18 @@ int res_x = 16, res_y = 9;
  * Erweitern Sie diese Funktion wie beschrieben.
  *
  */
-void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true) {
+void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true,
+		bool conservative=false)
+{
 	int x_min = 0;
 	int x_max = res_x;
 	int y_min = 0;
 	int y_max = res_y;
 	if (use_bb) {
-		x_min = min(round(tri.a.x), round(tri.b.x), round(tri.c.x));
-		x_max = max(round(tri.a.x), round(tri.b.x), round(tri.c.x));
-		y_min = min(round(tri.a.y), round(tri.b.y), round(tri.c.y));
-		y_max = max(round(tri.a.y), round(tri.b.y), round(tri.c.y));
+		x_min = min(floor(tri.a.x), floor(tri.b.x), floor(tri.c.x));
+		x_max = max(ceil(tri.a.x), ceil(tri.b.x), ceil(tri.c.x));
+		y_min = min(floor(tri.a.y), floor(tri.b.y), floor(tri.c.y));
+		y_max = max(ceil(tri.a.y), ceil(tri.b.y), ceil(tri.c.y));
 	}
 	if (draw_bb) {
 		draw((x_min,y_min)--(x_max,y_min)--(x_max,y_max)--(x_min,y_max)--cycle);
@@ -83,6 +85,13 @@ void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true) {
 			 *   <(p-c)|n(a-c)> >= 0
 			 */
 			pair p = (x+0.5,y+0.5);
+
+			if (conservative) {
+				path t = tri.a--tri.b--tri.c--cycle;
+				path pixel = (x,y)--(x+1,y)--(x+1,y+1)--(x,y+1)--cycle;
+				if (intersect(t, pixel).length > 0)
+					draw_pixel(x, y, G[1], G[2]);
+			}
 
 			if (dot(p-tri.a, line_normal(tri.a, tri.b)) < 0)
 				continue;
@@ -108,9 +117,8 @@ void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true) {
 	tri tri = tri((10.2,8.3), (2.7,2.2), (14.3,1.1));
 
 	draw_pixelgrid(res_x,res_y,dots=lightgray);
-	tri.draw(B[1]+linewidth(2));
-
 	raster_signed_distance(tri, draw_bb=false, use_bb=false);
+	tri.draw(B[1]+linewidth(2));
 
 	shipout("raster-tri-1.pdf"); erase();
 }
