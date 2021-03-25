@@ -74,8 +74,26 @@ void raster_signed_distance(tri tri, bool draw_bb=false, bool use_bb=true) {
 	}
 	for (int y = y_min; y <= y_max; y += 1)
 		for (int x = x_min; x <= x_max; x += 1) {
-			// draw_pixel(x, y, B[1], B[2]);
-		} 
+			/*
+			 * Pruefe ob Punkt (x,y) im Dreieck liegt.
+			 * Er liegt im Dreieck, falls:
+			 *   <(p-a)|n(b-a)> >= 0 &&
+			 *   <(p-b)|n(c-b)> >= 0 &&
+			 *   <(p-c)|n(a-c)> >= 0
+			 */
+			pair p = (x+0.5,y+0.5);
+
+			if (dot(p-tri.a, line_normal(tri.a, tri.b)) < 0)
+				continue;
+
+			if (dot(p-tri.b, line_normal(tri.b, tri.c)) < 0)
+				continue;
+
+			if (dot(p-tri.c, line_normal(tri.c, tri.a)) < 0)
+				continue;
+
+			draw_pixel(x, y, B[1], B[2]);
+		}
 }
 
 /*
