@@ -23,7 +23,10 @@ mat4 window_transform(int w, int h, float n, float f) {
 	//     cout << to_string(V) << endl;
 	// ausgeben (beachten Sie dafür auch die beiden auskommentieren Präprozessorzeilen oben)
 	//
-	mat4 W(1);
+	mat4 W = mat4(vec4(w/2,   0,       0, 0),
+		      vec4(  0, h/2,       0, 0),
+		      vec4(  0,   0, (f-n)/2, 0),
+		      vec4(w/2, h/2, (f+n)/2, 1));
 	return W;
 }
 
@@ -60,8 +63,7 @@ int main(int argc, char **argv)
 	mat4 V = viewing_transform(cmdline.cam_pos, cmdline.view_dir, cmdline.world_up);
 
 	auto W_transform = [&](const vec3 &v) {
-		// TODO Implementieren Sie die Transformation von NDC nach Viewport/Window Koordinaten
-		return v;
+		return W*vec4(v, 1.0f);
 	};
 	auto PW_transform = [&](const vec3 &v) {
 		// TODO Implementieren Sie die Transformation von Eye-Space in Viewport/Window Koordinaten
