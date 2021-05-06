@@ -15,18 +15,17 @@ vector<triangle> scene_triangles()
 		if (cmdline.user_z_defined)
 			z = cmdline.user_z;
 		// TODO Generieren Sie hier ein Dreieck in NDC
-		tris.push_back({vec3(   0,  1, z),
-				vec3(-1, -1, z),
-				vec3( 1, -1, z)});
+		tris.push_back({vec3( 0,  1, z),
+						vec3(-1, -1, z),
+						vec3( 1, -1, z)});
 	}
 	else if (cmdline.scene == es_tri) {
-		float z = 0;
+		float z = 10;
 		if (cmdline.user_z_defined)
 			z = cmdline.user_z;
-		// TODO Generieren Sie hier ein Dreieck das im Eye-Space interpretiert sichtbar ist.
-		tris.push_back({vec3(0,0,z),
-					    vec3(0,0,z),
-						vec3(0,0,z)});
+		tris.push_back({vec3( 0,  5, z),
+						vec3(-5, -5, z),
+						vec3( 5, -5, z)});
 	}
 	else if (cmdline.scene == bunny) {
 		vector<vec3> verts;

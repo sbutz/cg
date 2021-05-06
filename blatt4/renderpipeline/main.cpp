@@ -24,9 +24,9 @@ mat4 window_transform(int w, int h, float n, float f) {
 	// ausgeben (beachten Sie dafür auch die beiden auskommentieren Präprozessorzeilen oben)
 	//
 	mat4 W = mat4(vec4(w/2,   0,       0, 0),
-		      vec4(  0, h/2,       0, 0),
-		      vec4(  0,   0, (f-n)/2, 0),
-		      vec4(w/2, h/2, (f+n)/2, 1));
+				  vec4(  0, h/2,       0, 0),
+				  vec4(  0,   0, (f-n)/2, 0),
+				  vec4(w/2, h/2, (f+n)/2, 1));
 	return W;
 }
 
@@ -36,7 +36,12 @@ mat4 perspective_projection_transform(float fovy, float aspect, float n, float f
 	// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluPerspective.xml
 	// Achtung, wie oben beschrieben verwenden wir Column-Major Matrizen.
 	//
-	mat4 P(1);
+	fovy = fovy * M_PI/180;
+	fovy = cos(fovy/2)/sin(fovy/2);
+	mat4 P = mat4(vec4(fovy/aspect, 0, 0, 0),
+				  vec4(0, fovy, 0, 0),
+				  vec4(0, 0, (f+n)/(n-f), -1.0),
+				  vec4(0, 0, (2*f*n)/(n-f), 0));
 	return P;
 }
 
@@ -63,11 +68,12 @@ int main(int argc, char **argv)
 	mat4 V = viewing_transform(cmdline.cam_pos, cmdline.view_dir, cmdline.world_up);
 
 	auto W_transform = [&](const vec3 &v) {
-		return W*vec4(v, 1.0f);
+		vec4 v_ = W*vec4(v, 1.0f);
+		return vec3(v_.x/v_.w, v_.y/v_.w, v_.y/v_.w);
 	};
 	auto PW_transform = [&](const vec3 &v) {
-		// TODO Implementieren Sie die Transformation von Eye-Space in Viewport/Window Koordinaten
-		return v;
+		vec4 v_ = W*P*vec4(v, 1.0f);
+		return vec3(v_.x/v_.w, v_.y/v_.w, v_.y/v_.w);
 	};
 	auto VPW_transform = [&](const vec3 &v) {
 		// TODO Implementieren Sie die Transformation von Weltkoordinaten in Viewport/Window Koordinaten
