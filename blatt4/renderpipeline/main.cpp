@@ -77,16 +77,17 @@ int main(int argc, char **argv)
 	mat4 V = viewing_transform(cmdline.cam_pos, cmdline.view_dir, cmdline.world_up);
 
 	auto W_transform = [&](const vec3 &v) {
-		vec4 v_ = W * vec4(v, 1.0f);
-		return vec3(v_.x/v_.w, v_.y/v_.w, v_.y/v_.w);
+		return W * vec4(v, 1.0f);
 	};
 	auto PW_transform = [&](const vec3 &v) {
-		vec4 v_ = W * P * vec4(v, 1.0f);
-		return vec3(v_.x/v_.w, v_.y/v_.w, v_.y/v_.w);
+		auto clip = P * vec4(v, 1.0f);
+		auto ndc = clip/clip.w;
+		return W * ndc;
 	};
 	auto VPW_transform = [&](const vec3 &v) {
-		vec4 v_ = W * P * V * vec4(v, 1.0f);
-		return vec3(v_.x/v_.w, v_.y/v_.w, v_.y/v_.w);
+		auto clip = P * V * vec4(v, 1.0f);
+		auto ndc = clip/clip.w;
+		return W * ndc;
 	};
 
 	function<vec3(const vec3&)> vertex_trasnform;
