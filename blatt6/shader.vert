@@ -10,9 +10,10 @@ void main() {
 
 	// TODO: Aufgabe 1.4
 	// local_vertex soll im Eye-Space verstanden werden
+	vec4 clip = proj * vec4(local_vertex, 1.0);
 
 	// TODO: Aufgabe 1.5
 	// local_vertex soll im World-Space verstanden werden
 
-	gl_Position = vec4(local_vertex, 1.0);
+	gl_Position = clip;
 }

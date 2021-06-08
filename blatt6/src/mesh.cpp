@@ -26,8 +26,8 @@ static GLuint vbo = -1;
 static GLuint vbo_col = -1;
 static GLuint ibo = -1;
 
-#define CS_TRI
-// #define ES_TRI
+//#define CS_TRI
+#define ES_TRI
 // #define BUNNY
 
 #define VAO

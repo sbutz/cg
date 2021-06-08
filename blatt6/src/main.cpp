@@ -13,9 +13,13 @@ using namespace glm;
 
 
 mat4 perspective_projection_transform(float fovy, float aspect, float n, float f) {
-	mat4 P(1);
 	// TODO: Aufgabe 1.4
 	// OpenGL Projektionsmatrix
+	float F = 1.0/tan(M_PI*fovy/2/180.0);
+	mat4 P(vec4(F/aspect, 0, 0, 0),
+		   vec4(0, F, 0, 0),
+		   vec4(0, 0, (n+f)/(n-f), -1),
+		   vec4(0, 0, 2*n*f/(n-f), 0));
 	return P;
 }
 
