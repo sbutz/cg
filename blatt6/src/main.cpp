@@ -52,6 +52,8 @@ int main() {
 	load_mesh();
 	load_shader();
 
+	//glDisable(GL_DEPTH_TEST);
+
 	while (Context::running()) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.2, 0.2, 0.2, 1);
