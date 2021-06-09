@@ -224,7 +224,8 @@ mesh.o: mesh.cpp /usr/include/stdc-predef.h /usr/include/c++/10/vector \
  /usr/include/x86_64-linux-gnu/bits/timex.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
- /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h
+ /usr/include/GL/glew.h /usr/include/GL/glu.h /usr/include/GL/gl.h \
+ bunny.data
 /usr/include/stdc-predef.h:
 /usr/include/c++/10/vector:
 /usr/include/c++/10/bits/stl_algobase.h:
@@ -497,3 +498,4 @@ mesh.o: mesh.cpp /usr/include/stdc-predef.h /usr/include/c++/10/vector \
 /usr/include/GL/glew.h:
 /usr/include/GL/glu.h:
 /usr/include/GL/gl.h:
+bunny.data:
