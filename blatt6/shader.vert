@@ -1,10 +1,13 @@
 #version 130
 
 in vec3 local_vertex;
+in vec3 local_color;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
+
+out vec3 color;
 
 void main() {
 
@@ -17,4 +20,6 @@ void main() {
 	vec4 clip = proj * eye;
 
 	gl_Position = clip;
+
+	color = local_color;
 }

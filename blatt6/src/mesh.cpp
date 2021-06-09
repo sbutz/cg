@@ -4,10 +4,13 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+#include <iostream>
+
 using namespace std;
 using namespace glm;
 
 vector<vec3> vertices;
+vector<vec3> colors;
 vector<unsigned> indices;
 
 void add_tri(int a, int b, int c) {
@@ -46,6 +49,19 @@ void load_mesh() {
 #endif
 	add_tri(0,1,2);
 
+	// Aufgabe 1.6
+	// Farben generieren
+	for (int i = 0; i != vertices.size(); i++) {
+		if (i % 3 == 0 || 1) {
+			vec3 col = vec3(glm::linearRand(0.0f, 1.0f),
+							glm::linearRand(0.0f, 1.0f),
+							glm::linearRand(0.0f, 1.0f));
+			colors.push_back(col);
+		} else {
+			colors.push_back(colors[i-1]);
+		}
+	}
+
 
 	// TODO: Aufgabe 1.3
 	// VAO aufsetzen
@@ -58,6 +74,15 @@ void load_mesh() {
 					GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &vbo_col);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_col);
+	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(vec3), &colors[0],
+					GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -65,7 +90,6 @@ void load_mesh() {
 					&indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
