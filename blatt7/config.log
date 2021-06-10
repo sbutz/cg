@@ -182,6 +182,7 @@ config.status:852: creating shaders/Makefile
 config.status:852: creating render-data/Makefile
 config.status:852: creating render-data/fonts/Makefile
 config.status:852: creating config.h
+config.status:1033: config.h is unchanged
 config.status:1081: executing depfiles commands
 config.status:1158: cd src       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
 make: Nothing to be done for 'am--depfiles'.
