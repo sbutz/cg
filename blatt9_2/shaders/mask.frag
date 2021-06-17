@@ -33,6 +33,9 @@ float spec(vec3 l, float n_s) {
 void main() {
 	// TODO Mask-Texture Lookup und ggf. Fragment verwerfen.
 	// Mask-Textures nennt man auch Alphamaps
+	vec3 mask = texture(alphamap, tc).rgb;
+	if (mask == vec3(0))
+		discard;
 
 	// directional lighting components
 	vec3 diff_dl = diff(-dirlight_dir)    * dirlight_col * dirlight_scale;
