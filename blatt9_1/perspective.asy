@@ -234,8 +234,15 @@ pen fragment_shader(real x, real y, tri triangle, pair tc) {
 }
 
 pen fixed_function_fragment(real x, real y, tri triangle) {
+	//TODO
 	barycentric_coordinate bc = compute_barycentric_coord((x, y), triangle);
 	pair tc = bc.interpolate(triangle.a.tc, triangle.b.tc, triangle.c.tc);
+
+	// interplate z'
+	real z_ = bc.interpolate(triangle.a.rcp_z, triangle.b.rcp_z, triangle.c.rcp_z);
+	// a = a' / z'
+	tc = tc / z_;
+
 	return fragment_shader(x, y, triangle, tc);
 }
 
@@ -256,8 +263,11 @@ vertex_attributes vertex_shader(vertex_attributes view) {
 	return clip;
 }
 void fixed_function_vertex(vertex_attributes vattr) {
-	vattr.rcp_z  = 1 / vattr.pos.w;
-	vec4 ndc     = make_vec(vattr.pos.x*vattr.rcp_z, vattr.pos.y*vattr.rcp_z, vattr.pos.z*vattr.rcp_z, 1); 
+	// emit z' = 1/vz (z from clip space)
+	vattr.rcp_z = 1 / vattr.pos.z;
+	vattr.tc = vattr.tc * vattr.rcp_z;
+
+	vec4 ndc     = make_vec(vattr.pos.x/vattr.pos.w, vattr.pos.y/vattr.pos.w, vattr.pos.z/vattr.pos.w, 1);
 	vattr.pos    = mul(W, ndc);
 }
 tri pipe(tri in) {
@@ -277,8 +287,8 @@ tri pipe(tri in) {
 
 tri t1, t2;
 string mode = "head-on";
-// mode = "slant";
-// mode = "SLANT";
+mode = "slant";
+//mode = "SLANT";
 real tc_max = 3;
 
 if (mode == "head-on") {
