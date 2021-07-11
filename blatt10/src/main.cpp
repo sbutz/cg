@@ -205,7 +205,7 @@ int main(int argc, char** argv) {
 				de->unbind();
 			}
 		}
-#ifndef A04_SWITCHES
+#ifdef A04_SWITCHES
 		if ((int)active_mode >= Sky) {
 			glDisable(GL_CULL_FACE);
 			float n = Camera::current()->near;
