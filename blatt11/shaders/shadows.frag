@@ -43,7 +43,10 @@ float spec(vec3 l, vec3 n, float n_s) {
 
 float shadow_coeff(mat4 m, sampler2DShadow s) {
 	// TODO Bestimmen der Shadow-Texturkoordinate in NDC, dann Shift und Lookup
-	return 1.0;
+	vec4 shadow_tc = (m * vec4(pos_ws, 1.0));
+	shadow_tc /= shadow_tc.w;
+	shadow_tc.xyz = (shadow_tc.xyz + vec3(1.0)) * vec3(0.5);
+	return texture(s, shadow_tc.xyz);
 }
 
 void main() {
@@ -55,8 +58,8 @@ void main() {
 	// TODO Rufen Sie shadow_coeff mit passenden Parametern auf, einmal für die
 	// Shadowmap für das direktionale Licht und einemal für das Helikopter-Licht.
 	// 1.0 heißt: kein Schatten.
-	float shadow  = 1.0;	// shadow
-	float hshadow = 1.0;	// heli shadow (ehem pointlight, sieh vertexshader)
+	float shadow  = shadow_coeff(shadow_P*shadow_V, shadowmap);
+	float hshadow = shadow_coeff(heli_P*heli_V, heli_shadowmap);	// heli shadow (ehem pointlight, sieh vertexshader)
 	
 	// TODO Der Shift ist nur dazu da, dass es im Schatten nicht vollkommen
 	// finster ist. Welche Einstellung sieht für Sie gut aus?

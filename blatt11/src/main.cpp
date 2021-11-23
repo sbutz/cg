@@ -266,6 +266,8 @@ int main(int argc, char** argv) {
 			};
 			glCullFace(GL_FRONT);
 			// TODO Um das Rendern der Shadowmaps herum sollte Polygon-Offsetting aktiv sein
+            glEnable(GL_POLYGON_OFFSET_FILL);
+            glPolygonOffset(1, 1);
 			shadowmap->bind();
 			render(shadow_cam);
 			shadowmap->unbind();
@@ -273,6 +275,7 @@ int main(int argc, char** argv) {
 			heli_shadowmap->bind();
 			render(heli_cam);
 			heli_shadowmap->unbind();
+            glDisable(GL_POLYGON_OFFSET_FILL);
 			glCullFace(GL_BACK);
 
 			cam->make_current();
@@ -336,6 +339,10 @@ int main(int argc, char** argv) {
 				shader->uniform("shadowmap", shadowmap->depth_texture, 5);
 				shader->uniform("heli_shadowmap", heli_shadowmap->depth_texture, 6);
 				// TODO Stellen Sie die nötigen Matrizen als Uniforms bereit
+                shader->uniform("shadow_V", shadow_cam->view);
+                shader->uniform("shadow_P", shadow_cam->proj);
+				shader->uniform("heli_V", heli_cam->view);
+				shader->uniform("heli_P", heli_cam->proj);
 #endif
 				de->draw(glm::mat4(1));
 				de->unbind();

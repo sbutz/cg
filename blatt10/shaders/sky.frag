@@ -10,12 +10,12 @@ void main() {
 	// TODO:
 	// Bestimmen Sie die (normalisierte) Richtung in der sich das aktuelle
 	// Fragment von der Kamera aus befindet
-	vec3 dir = normalize(-pos_wc);
+	vec3 dir = normalize(pos_wc);
 
 	// TODO:
 	// Bestimmen Sie die Texturkoordinaten wie in der VL beschrieben
-	vec2 uv = vec2(0.5 + atan(dir.z, dir.x)/(2*PI),
-				   0.5 - asin(dir.y)/PI);
+	vec2 uv = vec2(0.5 - atan(dir.z, dir.x)/(2*PI),
+				   0.5 + asin(dir.y)/PI);
 	
 	out_col = vec4(texture(tex, uv).rgb, 1);
 	
