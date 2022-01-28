@@ -1,3 +1,3 @@
 # cg
 
-Übungen für die Vorlesung Computer Grafik.
+exercises for the computer graphics course at OTH.
